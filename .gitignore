@@ -1,0 +1,27 @@
+# Ignore all files
+.terraform*
+*.tfstate
+*.tfstate.backup
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+# Ignore sensitive variable files
+*.auto.tfvars.json
+*.auto.tfvars
+# Ignore any files named secret.tfvars
+secret.tfvars
+# Ignore local environment variable files
+.envrc
+.env
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+# Ignore any plan output files
+*.tfplan
+# Ignore override files 
+*.tfvars.override
+*.tfvars.override.json
