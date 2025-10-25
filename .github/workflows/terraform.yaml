@@ -20,7 +20,10 @@ on:
         description: 'GCP Project ID'
         required: true
         default: 'my-gcp-project'
-            
+env:
+  TF_IN_AUTOMATION: 'true'
+  GOOGLE_PROJECT: ${{ github.event.inputs.gcp_project }}
+  TF_TOKEN: ${{ secrets.TF_TOKEN }}
     
 jobs:
   terraform:
@@ -34,6 +37,8 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+        
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
