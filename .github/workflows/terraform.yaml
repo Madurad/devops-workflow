@@ -41,6 +41,9 @@ jobs:
       - name: Get project value
         run: gcloud config get-value project
 
+      - name: Check if the bucket exists
+        run: gcloud storage buckets describe gs://madura-state-bucket
+
       - name: Create terraform backend bucket if not exists
         run: |
             if ! gcloud storage buckets describe gs://madura-state-bucket --project=playground-s-11-95270d6c >/dev/null 2>&1; then
