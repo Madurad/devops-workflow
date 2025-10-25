@@ -11,7 +11,7 @@ override.tf.json
 terraform.rc
 # Ignore sensitive variable files
 *.auto.tfvars.json
-*.auto.tfvars
+
 # Ignore any files named secret.tfvars
 secret.tfvars
 # Ignore local environment variable files
