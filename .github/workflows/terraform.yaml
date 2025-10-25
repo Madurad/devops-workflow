@@ -43,8 +43,10 @@ jobs:
 
       - name: Create terraform backend bucket if not exists
         run: |
-            if ! gcloud storage buckets describe gs://madura-state-bucket --project=playground-s-11-95270d6c 2>/dev/null; then
+            if ! gcloud storage buckets describe gs://madura-state-bucket --project=playground-s-11-95270d6c >/dev/null 2>&1; then
                 gcloud storage buckets create gs://madura-state-bucket --location=us-central1 --project=playground-s-11-95270d6c
+            else
+                echo "Bucket madura-state-bucket already exists."
             fi
 
       - name: Setup Terraform
