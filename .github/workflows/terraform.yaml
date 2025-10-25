@@ -40,8 +40,8 @@ jobs:
 
       - name: Create terraform backend bucket if not exists
         run: |
-            if ! gsutil ls -p ${{ github.event.inputs.gcp_project }} gs://madura-state-bucket/ 2>/dev/null; then
-            gsutil mb -p ${{ github.event.inputs.gcp_project }} -l us-central1 gs://madura-state-bucket/
+            if ! gcloud storage buckets describe gs://madura-state-bucket --project=${{ github.event.inputs.gcp_project }} 2>/dev/null; then
+                gcloud storage buckets create gs://madura-state-bucket --location=us-central1 --project=${{ github.event.inputs.gcp_project }}
             fi
 
       - name: Setup Terraform
