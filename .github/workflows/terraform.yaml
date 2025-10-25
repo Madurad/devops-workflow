@@ -16,14 +16,6 @@ on:
         options:
           - plan
           - apply
-      gcp_project: 
-        description: 'GCP Project ID'
-        required: true
-        default: 'playground-s-11-95270d6c'
-env:
-  TF_IN_AUTOMATION: 'true'
-  GOOGLE_PROJECT: ${{ github.event.inputs.gcp_project }}
-  TF_TOKEN: ${{ secrets.TF_TOKEN }}
     
 jobs:
   terraform:
@@ -62,8 +54,8 @@ jobs:
 
       - name: Terraform Plan
         if: ${{ github.event.inputs.environment == 'plan' }}
-        run: terraform plan -var="gcp_project_id=${{ github.event.inputs.gcp_project }}" -out=tfplan
+        run: terraform plan -var="gcp_project_id=$PROJECT_ID" -out=tfplan
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.environment == 'apply' }}
-        run: terraform apply -var="gcp_project_id=${{ github.event.inputs.gcp_project }}" -auto-approve
+        run: terraform apply -var="gcp_project_id=$PROJECT_ID" -auto-approve
