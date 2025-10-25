@@ -1,0 +1,52 @@
+name: Terraform workflow
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'terraform action'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - plan
+          - apply
+      gcp_project: 
+        description: 'GCP Project ID'
+        required: true
+        default: 'my-gcp-project'
+            
+    
+jobs:
+  terraform:
+    name: 'Terraform Apply'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.0
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        if: ${{ github.event.inputs.environment == 'plan' }}
+        run: terraform plan -var="gcp_project_id=${{ github.event.inputs.gcp_project }}" -out=tfplan
+
+      - name: Terraform Apply
+        if: ${{ github.event.inputs.environment == 'apply' }}
+        run: terraform apply -var="gcp_project_id=${{ github.event.inputs.gcp_project }}" -auto-approve
