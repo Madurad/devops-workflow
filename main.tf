@@ -6,6 +6,12 @@ terraform {
       version = "~> 5.0"
     }
   }
+  backend "remote" {
+    organization = "frammix"
+    workspaces {
+      name = "gcp-infra"
+    }
+  }
 }
 
 provider "google" {
