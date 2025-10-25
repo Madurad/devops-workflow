@@ -38,6 +38,12 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
+      - name: Create terraform backend bucket if not exists
+        run: |
+            if ! gsutil ls -p ${{ github.event.inputs.gcp_project }} gs://madura-state-bucket/ 2>/dev/null; then
+            gsutil mb -p ${{ github.event.inputs.gcp_project }} -l us-central1 gs://madura-state-bucket/
+            fi
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
