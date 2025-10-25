@@ -43,7 +43,6 @@ jobs:
 
       - name: Create terraform backend bucket if not exists
         run: |
-            gcloud config set project playground-s-11-95270d6c
             if ! gcloud storage buckets describe gs://madura-state-bucket --project=playground-s-11-95270d6c 2>/dev/null; then
                 gcloud storage buckets create gs://madura-state-bucket --location=us-central1 --project=playground-s-11-95270d6c
             fi
