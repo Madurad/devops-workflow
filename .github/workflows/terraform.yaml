@@ -39,15 +39,17 @@ jobs:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
     
       - name: Get project value
-        run: gcloud config get-value project
+        run: |
+            PROJECT_ID=$(gcloud config get-value project)
+            echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
 
       - name: Check if the bucket exists
-        run: gcloud storage buckets describe gs://madura-state-bucket
+        run: gcloud storage buckets describe gs://madura-state-bucket --project=$PROJECT_ID || echo "Bucket does not exist."
 
       - name: Create terraform backend bucket if not exists
         run: |
-            if ! gcloud storage buckets describe gs://madura-state-bucket --project=playground-s-11-95270d6c >/dev/null 2>&1; then
-                gcloud storage buckets create gs://madura-state-bucket --location=us-central1 --project=playground-s-11-95270d6c
+            if ! gcloud storage buckets describe gs://madura-state-bucket --project=$PROJECT_ID >/dev/null 2>&1; then
+                gcloud storage buckets create gs://madura-state-bucket --location=us-central1 --project=$PROJECT_ID
             else
                 echo "Bucket madura-state-bucket already exists."
             fi
