@@ -43,17 +43,14 @@ jobs:
             PROJECT_ID=$(gcloud config get-value project)
             echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
 
-      - name: Check if the bucket exists
-        run: gcloud storage buckets list --project=$PROJECT_ID | grep madura-state-bucket || echo "Bucket does not exist."
-
-      - name: Create terraform backend bucket if not exists
+      - name: Check and Create GCS Bucket for Terraform State
         run: |
-            if ! gcloud storage buckets describe gs://madura-state-bucket --project=$PROJECT_ID >/dev/null 2>&1; then
-                gcloud storage buckets create gs://madura-state-bucket --location=us-central1 --project=$PROJECT_ID
+            if gcloud storage buckets list --project=$PROJECT_ID | grep madura-state-bucket; then
+                echo "Bucket exists"
             else
-                echo "Bucket madura-state-bucket already exists."
+                echo "Bucket does not exist"
+                gcloud storage buckets create gs://madura-state-bucket --location=us-central1 --project=$PROJECT_ID
             fi
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
