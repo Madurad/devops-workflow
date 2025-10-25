@@ -53,6 +53,7 @@ resource "google_compute_route" "public" {
   name       = "${var.project_name}-public-route"
   network    = google_compute_network.main.id
   dest_range = "0.0.0.0/0"
+  next_hop_gateway = "default-internet-gateway"
 }
 
 # Security Group
