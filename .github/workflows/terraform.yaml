@@ -44,7 +44,7 @@ jobs:
             echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
 
       - name: Check if the bucket exists
-        run: gcloud storage buckets describe gs://madura-state-bucket --project=$PROJECT_ID || echo "Bucket does not exist."
+        run: gcloud storage buckets list --project=$PROJECT_ID | grep madura-state-bucket || echo "Bucket does not exist."
 
       - name: Create terraform backend bucket if not exists
         run: |
