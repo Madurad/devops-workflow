@@ -50,12 +50,9 @@ resource "google_compute_subnetwork" "private" {
 
 # Route Table for Public Subnets
 resource "google_compute_route" "public" {
-  count = length(google_compute_subnetwork.public)
-
-  name        = "${var.project_name}-public-route-${count.index + 1}"
+  name       = "${var.project_name}-public-route"
   network    = google_compute_network.main.id
   dest_range = "0.0.0.0/0"
-  next_hop_gateway = google_compute_address.main.id
 }
 
 # Security Group
