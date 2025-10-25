@@ -37,6 +37,9 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+    
+      - name: Get project value
+        run: gcloud config get-value project
 
       - name: Create terraform backend bucket if not exists
         run: |
