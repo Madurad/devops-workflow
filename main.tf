@@ -6,11 +6,9 @@ terraform {
       version = "~> 5.0"
     }
   }
-  backend "remote" {
-    organization = "frammix"
-    workspaces {
-      name = "gcp-infra"
-    }
+  backend "gcs" {
+    bucket      = "madura-state-bucket"
+    prefix      = "gcp-infra"
   }
 }
 
