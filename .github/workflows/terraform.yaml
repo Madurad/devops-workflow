@@ -19,7 +19,7 @@ on:
       gcp_project: 
         description: 'GCP Project ID'
         required: true
-        default: 'my-gcp-project'
+        default: 'playground-s-11-95270d6c'
 env:
   TF_IN_AUTOMATION: 'true'
   GOOGLE_PROJECT: ${{ github.event.inputs.gcp_project }}
@@ -37,16 +37,25 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+    
+      - name: Get project value
+        run: |
+            PROJECT_ID=$(gcloud config get-value project)
+            echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
 
-      - name: Setup Terraform CLI
-        uses: hashicorp/setup-terraform@v1
-        with:
-         cli_config_credentials_token: ${{ secrets.TF_TOKEN }}
-
+      - name: Check and Create GCS Bucket for Terraform State
+        run: |
+            if gcloud storage buckets list --project=$PROJECT_ID | grep madura-state-bucket; then
+                echo "Bucket exists"
+            else
+                echo "Bucket does not exist"
+                gcloud storage buckets create gs://madura-state-bucket --location=us-central1 --project=$PROJECT_ID
+            fi
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.0.0
+        #   cli_config_credentials_token: ${{ secrets.TF_TOKEN }}
 
       - name: Terraform Init
         run: terraform init
