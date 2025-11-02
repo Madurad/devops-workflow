@@ -37,19 +37,19 @@ jobs:
 
       - name: Generate a random bucket name
         run: |
-            echo "BUCKET_NAME=madura-state-bucket-$PROJECT_ID" >> $GITHUB_ENV
+            echo "TF_VAR_BUCKET_NAME=madura-state-bucket-$PROJECT_ID" >> $GITHUB_ENV
 
       - name: Print bucket name
         run: |
-            echo "Bucket Name is $BUCKET_NAME"
+            echo "Bucket Name is $TF_VAR_BUCKET_NAME"
 
       - name: Check and Create GCS Bucket for Terraform State
         run: |
-            if gcloud storage buckets list --project=$PROJECT_ID | grep $BUCKET_NAME; then
+            if gcloud storage buckets list --project=$PROJECT_ID | grep $TF_VAR_BUCKET_NAME; then
                 echo "Bucket exists"
             else
                 echo "Bucket does not exist"
-                gcloud storage buckets create gs://$BUCKET_NAME --location=us-central1 --project=$PROJECT_ID
+                gcloud storage buckets create gs://$TF_VAR_BUCKET_NAME --location=us-central1 --project=$PROJECT_ID
             fi
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
