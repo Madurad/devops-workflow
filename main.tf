@@ -7,7 +7,7 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket      = env("BUCKET_NAME")
+    bucket      = "${var.bucket_name}"
     prefix      = "gcp-infra"
   }
 }
