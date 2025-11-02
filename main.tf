@@ -7,7 +7,7 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket      = "madura-state-bucket"
+    bucket      = env("BUCKET_NAME")
     prefix      = "gcp-infra"
   }
 }
