@@ -35,6 +35,10 @@ jobs:
             PROJECT_ID=$(gcloud config get-value project)
             echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
 
+      - name: Generate a random bucket name
+        run: |
+            echo "BUCKET_NAME=madura-state-bucket-$PROJECT_ID" >> $GITHUB_ENV
+
       - name: Check and Create GCS Bucket for Terraform State
         run: |
             if gcloud storage buckets list --project=$PROJECT_ID | grep madura-state-bucket; then
