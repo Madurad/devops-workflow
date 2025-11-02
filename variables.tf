@@ -10,6 +10,11 @@ variable "project_name" {
   default     = "madura-terraform-project"
 }
 
+variable "BUCKET_NAME" {
+  description = "GCS bucket name for Terraform state"
+  type        = string
+}
+
 variable "environment" {
   description = "Environment name (dev, staging, prod)"
   type        = string
