@@ -7,7 +7,7 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket      = "${var.bucket_name}"
+    bucket      = "madurad-bucket-${timestamp()}"
     prefix      = "gcp-infra"
   }
 }
