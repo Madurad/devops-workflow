@@ -7,7 +7,8 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket      = "madurad-bucket-${timestamp()}"
+    # Configure the GCS backend
+    # Bucket name and prefix are provided via GitHub Actions outputs/variables
     prefix      = "gcp-infra"
   }
 }
