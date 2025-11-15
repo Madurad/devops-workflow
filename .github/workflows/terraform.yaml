@@ -58,7 +58,7 @@ jobs:
         #   cli_config_credentials_token: ${{ secrets.TF_TOKEN }}
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend-config="bucket=$TF_VAR_BUCKET_NAME" -backend-config="prefix=gcp-infra"
 
       - name: Terraform Plan
         if: ${{ github.event.inputs.environment == 'plan' }}
