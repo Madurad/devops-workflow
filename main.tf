@@ -80,6 +80,11 @@ data "google_compute_zones" "available" {
   region = var.gcp_region
 }
 
+resource "google_enable_api" "container" {
+  service = "container.googleapis.com"
+  project = var.gcp_project_id
+}
+
 resource "google_container_cluster" "primary" {
   name     = "${var.project_name}-k8s-cluster"
   location = var.gcp_region
