@@ -22,6 +22,7 @@ provider "google" {
 # VPC
 resource "google_compute_network" "main" {
   name                    = "${var.project_name}-vpc"
+  project                 = var.gcp_project_id
   auto_create_subnetworks = false
 
   routing_mode = "REGIONAL"
@@ -80,7 +81,7 @@ data "google_compute_zones" "available" {
   region = var.gcp_region
 }
 
-resource "google_enable_api" "container" {
+resource "google_project_service" "gke_api" {
   service = "container.googleapis.com"
   project = var.gcp_project_id
 }
