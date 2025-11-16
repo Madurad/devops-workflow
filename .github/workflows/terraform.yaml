@@ -51,6 +51,11 @@ jobs:
                 echo "Bucket does not exist"
                 gcloud storage buckets create gs://$TF_VAR_BUCKET_NAME --location=us-central1 --project=$PROJECT_ID
             fi
+
+      - name: Enable Required APIs
+        run: |
+            gcloud services enable storage.googleapis.com --project=$PROJECT_ID
+            gcloud services enable container.googleapis.com --project=$PROJECT_ID
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
