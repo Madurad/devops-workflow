@@ -84,31 +84,38 @@ data "google_compute_zones" "available" {
 resource "google_container_cluster" "primary" {
   name     = "${var.project_name}-k8s-cluster"
   location = var.gcp_region
-  project = var.gcp_project_id
+  project  = var.gcp_project_id
 
   initial_node_count = 1
-  
-}
-
-resource "google_container_node_pool" "primary_nodes" {
-  name       = "${var.project_name}-node-pool"
-  location   = var.gcp_region
-  cluster    = google_container_cluster.primary.name
-  project    = var.gcp_project_id
-
-  node_count = 1
 
   node_config {
-    machine_type = "e2-small"
-    disk_size_gb = var.disk_size_gb
-
+    machine_type  = "e2-small"
+    disk_size_gb  = var.disk_size_gb
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform",
     ]
   }
-
-  autoscaling {
-    max_node_count = 3
-    min_node_count = 1
-  }
 }
+
+# resource "google_container_node_pool" "primary_nodes" {
+#   name       = "${var.project_name}-node-pool"
+#   location   = var.gcp_region
+#   cluster    = google_container_cluster.primary.name
+#   project    = var.gcp_project_id
+
+#   node_count = 1
+
+#   node_config {
+#     machine_type = "e2-small"
+#     disk_size_gb = var.disk_size_gb
+
+#     oauth_scopes = [
+#       "https://www.googleapis.com/auth/cloud-platform",
+#     ]
+#   }
+
+#   autoscaling {
+#     max_node_count = 3
+#     min_node_count = 1
+#   }
+# }
