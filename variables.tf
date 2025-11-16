@@ -69,3 +69,9 @@ variable "gcp_service_account" {
   type        = string
   default     = "my-gcp-service-account@my-gcp-project.iam.gserviceaccount.com"
 }
+
+variable "disk_size_gb" {
+  description = "defaul disk size in gb"
+  type = number
+  default = 20
+}
