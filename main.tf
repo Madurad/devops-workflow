@@ -81,25 +81,6 @@ data "google_compute_zones" "available" {
   region = var.gcp_region
 }
 
-resource "google_project_service" "cloudresource_manager" {
-  service = "cloudresourcemanager.googleapis.com"
-  project = var.gcp_project_id
-}
-
-resource "google_project_service" "compute_api" {
-  service = "compute.googleapis.com"
-  project = var.gcp_project_id
-}
-
-resource "google_project_service" "gke_api" {
-  service  = "container.googleapis.com"
-  project  = var.gcp_project_id
-  depends_on = [
-    google_project_service.cloudresource_manager,
-    google_project_service.compute_api
-  ]
-}
-
 resource "google_container_cluster" "primary" {
   name     = "${var.project_name}-k8s-cluster"
   location = var.gcp_region
