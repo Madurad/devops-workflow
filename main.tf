@@ -86,7 +86,7 @@ resource "google_container_cluster" "primary" {
   location = var.gcp_region
   project = var.gcp_project_id
 
-  initial_node_count = 2
+  initial_node_count = 1
   
 }
 
@@ -96,10 +96,11 @@ resource "google_container_node_pool" "primary_nodes" {
   cluster    = google_container_cluster.primary.name
   project    = var.gcp_project_id
 
-  node_count = 2
+  node_count = 1
 
   node_config {
-    machine_type = "e2-medium"
+    machine_type = "e2-small"
+    disk_size_gb = 20
 
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform",
