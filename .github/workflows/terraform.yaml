@@ -54,6 +54,7 @@ jobs:
 
       - name: Enable Required APIs
         run: |
+            gcloud services enable cloudresourcemanager.googleapis.com --project=$PROJECT_ID
             gcloud services enable storage.googleapis.com --project=$PROJECT_ID
             gcloud services enable container.googleapis.com --project=$PROJECT_ID
       - name: Setup Terraform
