@@ -30,9 +30,6 @@ resource "helm_release" "argocd" {
     chart      = "argo-cd"
     namespace  = kubernetes_namespace.argocd.metadata[0].name
     version    = "5.23.6"
-    values = [
-        file("${path.module}/argocd-values.yaml")
-    ]
 
     set = [ {
       name = "server.service.type"
