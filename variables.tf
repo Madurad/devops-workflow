@@ -10,6 +10,11 @@ variable "project_name" {
   default     = "madura-terraform-project"
 }
 
+variable "BUCKET_NAME" {
+  description = "GCS bucket name for Terraform state"
+  type        = string
+}
+
 variable "environment" {
   description = "Environment name (dev, staging, prod)"
   type        = string
@@ -63,4 +68,10 @@ variable "gcp_service_account" {
   description = "GCP Service Account email for resource access"
   type        = string
   default     = "my-gcp-service-account@my-gcp-project.iam.gserviceaccount.com"
+}
+
+variable "disk_size_gb" {
+  description = "defaul disk size in gb"
+  type = number
+  default = 20
 }
