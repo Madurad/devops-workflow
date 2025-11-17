@@ -24,7 +24,7 @@ resource "kubernetes_namespace" "argocd" {
 
 resource "helm_release" "argocd" {
 
-    depends_on = [ kubernetes_namespace.argocd, google_container_node_pool.primary_nodes ]
+    depends_on = [ kubernetes_namespace.argocd ]
     name       = "argocd"
     repository = "https://argoproj.github.io/argo-helm"
     chart      = "argo-cd"
