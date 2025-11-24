@@ -7,7 +7,8 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket      = "madura-state-bucket"
+    # Configure the GCS backend
+    # Bucket name and prefix are provided via GitHub Actions outputs/variables
     prefix      = "gcp-infra"
   }
 }
@@ -21,6 +22,7 @@ provider "google" {
 # VPC
 resource "google_compute_network" "main" {
   name                    = "${var.project_name}-vpc"
+  project                 = var.gcp_project_id
   auto_create_subnetworks = false
 
   routing_mode = "REGIONAL"
@@ -78,3 +80,42 @@ resource "google_compute_firewall" "web" {
 data "google_compute_zones" "available" {
   region = var.gcp_region
 }
+
+resource "google_container_cluster" "primary" {
+  name     = "${var.project_name}-k8s-cluster"
+  location = var.gcp_region
+  project  = var.gcp_project_id
+
+  initial_node_count = 1
+
+  node_config {
+    machine_type  = "e2-small"
+    disk_size_gb  = var.disk_size_gb
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform",
+    ]
+  }
+}
+
+# resource "google_container_node_pool" "primary_nodes" {
+#   name       = "${var.project_name}-node-pool"
+#   location   = var.gcp_region
+#   cluster    = google_container_cluster.primary.name
+#   project    = var.gcp_project_id
+
+#   node_count = 1
+
+#   node_config {
+#     machine_type = "e2-small"
+#     disk_size_gb = var.disk_size_gb
+
+#     oauth_scopes = [
+#       "https://www.googleapis.com/auth/cloud-platform",
+#     ]
+#   }
+
+#   autoscaling {
+#     max_node_count = 3
+#     min_node_count = 1
+#   }
+# }

@@ -35,14 +35,28 @@ jobs:
             PROJECT_ID=$(gcloud config get-value project)
             echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
 
+      - name: Generate a random bucket name
+        run: |
+            echo "TF_VAR_BUCKET_NAME=madura-state-bucket-$PROJECT_ID" >> $GITHUB_ENV
+
+      - name: Print bucket name
+        run: |
+            echo "Bucket Name is $TF_VAR_BUCKET_NAME"
+
       - name: Check and Create GCS Bucket for Terraform State
         run: |
-            if gcloud storage buckets list --project=$PROJECT_ID | grep madura-state-bucket; then
+            if gcloud storage buckets list --project=$PROJECT_ID | grep $TF_VAR_BUCKET_NAME; then
                 echo "Bucket exists"
             else
                 echo "Bucket does not exist"
-                gcloud storage buckets create gs://madura-state-bucket --location=us-central1 --project=$PROJECT_ID
+                gcloud storage buckets create gs://$TF_VAR_BUCKET_NAME --location=us-central1 --project=$PROJECT_ID
             fi
+
+      - name: Enable Required APIs
+        run: |
+            gcloud services enable cloudresourcemanager.googleapis.com --project=$PROJECT_ID
+            gcloud services enable storage.googleapis.com --project=$PROJECT_ID
+            gcloud services enable container.googleapis.com --project=$PROJECT_ID
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -50,7 +64,7 @@ jobs:
         #   cli_config_credentials_token: ${{ secrets.TF_TOKEN }}
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend-config="bucket=$TF_VAR_BUCKET_NAME" -backend-config="prefix=gcp-infra"
 
       - name: Terraform Plan
         if: ${{ github.event.inputs.environment == 'plan' }}
