@@ -4,9 +4,10 @@ output "current_project" {
   value = data.google_client_config.default.project
 }
 
-output "access_token" {
-  value = data.google_client_config.default.access_token
-}
+# output "access_token" {
+#   value = data.google_client_config.default.access_token
+#   sensitive = true
+# }
 
 provider "kubernetes" {
     host                   = google_container_cluster.primary.endpoint
